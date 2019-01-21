@@ -1,0 +1,65 @@
+---
+title: "Ridge Regression"
+author: 
+  Group-1:"
+    Ashish Alva, 
+    Krunal Rasal, 
+    Harshal Tawde, 
+    Saumit Patki, 
+    Ganesh Jadhav, 
+    Rajendra Desai, 
+    Mayura Zadane, 
+    Sailee Yadav"
+output: 
+  html_notebook: 
+    toc: yes
+  html_document:
+    number_sections: TRUE
+runtime: shiny
+---
+##
+
+
+  Ridge regression is an extension for linear regression. It's basically a regularized linear regression model.
+  An important fact we need to notice about ridge regression is that it enforces the ````??``` coefficients to be lower, but it does not enforce them to be zero. That is, it will not get rid of irrelevant features but rather minimize their impact on the trained model.
+  
+  
+## Need of Ridge Regression
+
+###To overcome OverFiting
+
+ We will take an example of model built using Liner Regression to explain the concept of overfitting
+
+ With Linear Regression we will find the line that best fits the data in other words we will find a line that results in minimum sum of squared residuals
+
+
+###Dataset
+using dataset
+```
+longley <- read_excel(r"D:\Ridge\data\longley.xls")
+```
+
+
+```{r render-data}
+#renderTable(longley)
+#renderDataTable(longley)
+
+DT::renderDataTable(longley)
+```
+
+```{r slider-input}
+#one slider
+sliderInput(
+      inputId="MySlider", label="Choose appropriate Value",
+      min=0,max = 10, value=3
+)
+#two ended slider
+sliderInput(
+  inputId = "MySlider2",label="Choose appropriate Value",
+      min=0,max = 10, value=c(4,6)
+)
+```
+
+```{r print slider-input}
+renderPrint(input$MySlider2)
+```
