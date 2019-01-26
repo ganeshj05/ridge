@@ -17,35 +17,111 @@ output:
     number_sections: TRUE
 runtime: shiny
 ---
-##
+## Introduction
 
+  Ridge regression is an extension for linear regression. It's basically a regularized linear regression model. The penalty term (lambda) regularizes the coefficients such that if the coefficients take large values the optimization function is penalized. So, ridge regression shrinks the coefficients and it helps to reduce the model complexity and multi-collinearity.
 
-  Ridge regression is an extension for linear regression. It's basically a regularized linear regression model.
   An important fact we need to notice about ridge regression is that it enforces the ````??``` coefficients to be lower, but it does not enforce them to be zero. That is, it will not get rid of irrelevant features but rather minimize their impact on the trained model.
-  
-  
+
+```
+Objective = RSS + ?? * (sum of square of coefficients)
+```
 ## Need of Ridge Regression
 
 ###To overcome OverFiting
 
- We will take an example of model built using Liner Regression to explain the concept of overfitting
+  We will take an example of model built using Liner Regression to explain the concept of overfitting
 
- With Linear Regression we will find the line that best fits the data in other words we will find a line that results in minimum sum of squared residuals
+  With Linear Regression we will find the line that best fits the data in other words we will find a line that results in minimum sum of squared residuals
 
+###Required Libraries
+```
+library(glmnet)
+
+```
 
 ###Dataset
-using dataset
+using inbuilt databset swiss.
 ```
-longley <- read_excel(r"D:\Ridge\data\longley.xls")
+swiss <- datasets::swiss
 ```
-
-
 ```{r render-data}
-#renderTable(longley)
-#renderDataTable(longley)
+#renderTable(swiss)
+#renderDataTable(swiss)
 
-DT::renderDataTable(longley)
+DT::renderDataTable(swiss)
 ```
+
+```
+x <- model.matrix(Fertility~., swiss)[,-1]
+y <- swiss$Fertility
+lambda <- 10^seq(10, -2, length = 100)
+```
+```{r slider-input1}
+#one slider
+sliderInput(
+      inputId="TrainingSlide", label="Please select data % training model",
+      min=10, max = 90, value=50
+)
+```
+```{r print slider-input1}
+#renderPrint(input$TrainingSlide)
+#testRatio = 100/input$TrainingSlide
+#testRatio
+```
+```
+set.seed(489)
+train = sample(1:nrow(x), nrow(x)/(100/input$TrainingSlide))
+test = (-train)
+ytest = y[test]
+
+```
+```
+swisslm <- lm(Fertility~., data = swiss)
+coef(swisslm)
+
+```
+
+     (Intercept)      Agriculture      Examination        Education         Catholic   Infant.Mortality 
+      66.9151817       -0.1721140       -0.2580082       -0.8709401        0.1041153        1.0770481
+      
+```
+ridge.mod <- glmnet(x, y, alpha = 0, lambda = lambda)
+predict(ridge.mod, s = 0, type = 'coefficients')[1:6]
+```
+[1] 66.8911177 -0.1714307 -0.2603091 -0.8681376  0.1037196  1.0776950
+
+The differences here are nominal. Let's see if we can use ridge to
+improve on the OLS estimate.
+
+```
+swisslm <- lm(Fertility~., data = swiss, subset = train)
+ridge.mod <- glmnet(x[train,], y[train], alpha = 0, lambda = lambda)
+```
+find the best lambda from our list via cross-validation
+```
+cv.out <- cv.glmnet(x[train,], y[train], alpha = 0)
+```
+**Warning: Option grouped=FALSE enforced in cv.glmnet, since < 3 observations per fold
+
+```
+bestlam <- cv.out$lambda.min
+#make predictions
+ridge.pred <- predict(ridge.mod, s = bestlam, newx = x[test,])
+s.pred <- predict(swisslm, newdata = swiss[test,])
+#check MSE
+mean((s.pred-ytest)^2)
+## [1] 106.0087
+
+mean((ridge.pred-ytest)^2)
+## [1] 93.02157
+Ridge performs better for this data according to the MSE.
+
+#a look at the coefficients
+out = glmnet(x[train,],y[train],alpha = 0)
+predict(ridge.mod, type = "coefficients", s = bestlam)[1:6,]
+```
+install.packages("shinyWidgets")
 
 ```{r slider-input}
 #one slider
@@ -62,4 +138,5 @@ sliderInput(
 
 ```{r print slider-input}
 renderPrint(input$MySlider2)
+ren
 ```

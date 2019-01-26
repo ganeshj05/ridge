@@ -241,28 +241,41 @@ $(document).ready(function () {
 
 <div id="section-TOC">
 <ul>
-<li><a href="#section-section"></a></li>
+<li><a href="#section-introduction">Introduction</a></li>
 <li><a href="#section-need-of-ridge-regression">Need of Ridge Regression</a><ul>
 <li><a href="#section-to-overcome-overfiting">To overcome OverFiting</a></li>
+<li><a href="#section-required-libraries">Required Libraries</a></li>
 <li><a href="#section-dataset">Dataset</a></li>
 </ul></li>
 </ul>
 </div>
 
 <!-- rnb-text-begin -->
-<div id="section-section" class="section level2">
-<h2></h2>
-<p>Ridge regression is an extension for linear regression. It’s basically a regularized linear regression model. An important fact we need to notice about ridge regression is that it enforces the `<code>??</code> coefficients to be lower, but it does not enforce them to be zero. That is, it will not get rid of irrelevant features but rather minimize their impact on the trained model.</p>
+<div id="section-introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Ridge regression is an extension for linear regression. It’s basically a regularized linear regression model. The penalty term (lambda) regularizes the coefficients such that if the coefficients take large values the optimization function is penalized. So, ridge regression shrinks the coefficients and it helps to reduce the model complexity and multi-collinearity.</p>
+<p>An important fact we need to notice about ridge regression is that it enforces the `<code>??</code> coefficients to be lower, but it does not enforce them to be zero. That is, it will not get rid of irrelevant features but rather minimize their impact on the trained model.</p>
+<pre><code>Objective = RSS + ?? * (sum of square of coefficients)</code></pre>
 </div>
 <div id="section-need-of-ridge-regression" class="section level2">
 <h2>Need of Ridge Regression</h2>
 <div id="section-to-overcome-overfiting" class="section level3">
 <h3>To overcome OverFiting</h3>
+<p>We will take an example of model built using Liner Regression to explain the concept of overfitting</p>
+<p>With Linear Regression we will find the line that best fits the data in other words we will find a line that results in minimum sum of squared residuals</p>
+</div>
+<div id="section-required-libraries" class="section level3">
+<h3>Required Libraries</h3>
+<pre><code>library(glmnet)
+</code></pre>
 </div>
 <div id="section-dataset" class="section level3">
 <h3>Dataset</h3>
 <p>using dataset</p>
-<pre><code>longley &lt;- read_excel(r&quot;D:\Ridge\data\longley.xls&quot;)</code></pre>
+<pre><code>swiss &lt;- datasets::swiss</code></pre>
+<pre><code>x &lt;- model.matrix(Fertility~., swiss)[,-1]
+y &lt;- swiss$Fertility
+lambda &lt;- 10^seq(10, -2, length = 100)</code></pre>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI3JlbmRlclRhYmxlKGxvbmdsZXkpXG4jcmVuZGVyRGF0YVRhYmxlKGxvbmdsZXkpXG5cbkRUOjpyZW5kZXJEYXRhVGFibGUobG9uZ2xleSlcbmBgYCJ9 -->
@@ -298,7 +311,7 @@ sliderInput(
 </div>
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlJpZGdlIFJlZ3Jlc3Npb24iDQphdXRob3I6IA0KICBHcm91cC0xOiINCiAgICBBc2hpc2ggQWx2YSwgDQogICAgS3J1bmFsIFJhc2FsLCANCiAgICBIYXJzaGFsIFRhd2RlLCANCiAgICBTYXVtaXQgUGF0a2ksIA0KICAgIEdhbmVzaCBKYWRoYXYsIA0KICAgIFJhamVuZHJhIERlc2FpLCANCiAgICBNYXl1cmEgWmFkYW5lLCANCiAgICBTYWlsZWUgWWFkYXYiDQpvdXRwdXQ6IA0KICBodG1sX25vdGVib29rOiANCiAgICB0b2M6IHllcw0KICBodG1sX2RvY3VtZW50Og0KICAgIG51bWJlcl9zZWN0aW9uczogVFJVRQ0KcnVudGltZTogc2hpbnkNCi0tLQ0KIyMNCg0KDQogIFJpZGdlIHJlZ3Jlc3Npb24gaXMgYW4gZXh0ZW5zaW9uIGZvciBsaW5lYXIgcmVncmVzc2lvbi4gSXQncyBiYXNpY2FsbHkgYSByZWd1bGFyaXplZCBsaW5lYXIgcmVncmVzc2lvbiBtb2RlbC4NCiAgQW4gaW1wb3J0YW50IGZhY3Qgd2UgbmVlZCB0byBub3RpY2UgYWJvdXQgcmlkZ2UgcmVncmVzc2lvbiBpcyB0aGF0IGl0IGVuZm9yY2VzIHRoZSBgYGBgPz9gYGAgY29lZmZpY2llbnRzIHRvIGJlIGxvd2VyLCBidXQgaXQgZG9lcyBub3QgZW5mb3JjZSB0aGVtIHRvIGJlIHplcm8uIFRoYXQgaXMsIGl0IHdpbGwgbm90IGdldCByaWQgb2YgaXJyZWxldmFudCBmZWF0dXJlcyBidXQgcmF0aGVyIG1pbmltaXplIHRoZWlyIGltcGFjdCBvbiB0aGUgdHJhaW5lZCBtb2RlbC4NCiAgDQogIA0KIyMgTmVlZCBvZiBSaWRnZSBSZWdyZXNzaW9uDQoNCiMjI1RvIG92ZXJjb21lIE92ZXJGaXRpbmcNCg0KIyMjRGF0YXNldA0KdXNpbmcgZGF0YXNldA0KYGBgDQpsb25nbGV5IDwtIHJlYWRfZXhjZWwociJEOlxSaWRnZVxkYXRhXGxvbmdsZXkueGxzIikNCmBgYA0KDQoNCmBgYHtyIHJlbmRlci1kYXRhfQ0KI3JlbmRlclRhYmxlKGxvbmdsZXkpDQojcmVuZGVyRGF0YVRhYmxlKGxvbmdsZXkpDQoNCkRUOjpyZW5kZXJEYXRhVGFibGUobG9uZ2xleSkNCmBgYA0KDQpgYGB7ciBzbGlkZXItaW5wdXR9DQojb25lIHNsaWRlcg0Kc2xpZGVySW5wdXQoDQogICAgICBpbnB1dElkPSJNeVNsaWRlciIsIGxhYmVsPSJDaG9vc2UgYXBwcm9wcmlhdGUgVmFsdWUiLA0KICAgICAgbWluPTAsbWF4ID0gMTAsIHZhbHVlPTMNCikNCiN0d28gZW5kZWQgc2xpZGVyDQpzbGlkZXJJbnB1dCgNCiAgaW5wdXRJZCA9ICJNeVNsaWRlcjIiLGxhYmVsPSJDaG9vc2UgYXBwcm9wcmlhdGUgVmFsdWUiLA0KICAgICAgbWluPTAsbWF4ID0gMTAsIHZhbHVlPWMoNCw2KQ0KKQ0KYGBgDQoNCmBgYHtyIHByaW50IHNsaWRlci1pbnB1dH0NCnJlbmRlclByaW50KGlucHV0JE15U2xpZGVyMikNCmBgYA==</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlJpZGdlIFJlZ3Jlc3Npb24iDQphdXRob3I6IA0KICBHcm91cC0xOiINCiAgICBBc2hpc2ggQWx2YSwgDQogICAgS3J1bmFsIFJhc2FsLCANCiAgICBIYXJzaGFsIFRhd2RlLCANCiAgICBTYXVtaXQgUGF0a2ksIA0KICAgIEdhbmVzaCBKYWRoYXYsIA0KICAgIFJhamVuZHJhIERlc2FpLCANCiAgICBNYXl1cmEgWmFkYW5lLCANCiAgICBTYWlsZWUgWWFkYXYiDQpvdXRwdXQ6IA0KICBodG1sX25vdGVib29rOiANCiAgICB0b2M6IHllcw0KICBodG1sX2RvY3VtZW50Og0KICAgIG51bWJlcl9zZWN0aW9uczogVFJVRQ0KcnVudGltZTogc2hpbnkNCi0tLQ0KIyMgSW50cm9kdWN0aW9uDQoNCiAgUmlkZ2UgcmVncmVzc2lvbiBpcyBhbiBleHRlbnNpb24gZm9yIGxpbmVhciByZWdyZXNzaW9uLiBJdCdzIGJhc2ljYWxseSBhIHJlZ3VsYXJpemVkIGxpbmVhciByZWdyZXNzaW9uIG1vZGVsLiBUaGUgcGVuYWx0eSB0ZXJtIChsYW1iZGEpIHJlZ3VsYXJpemVzIHRoZSBjb2VmZmljaWVudHMgc3VjaCB0aGF0IGlmIHRoZSBjb2VmZmljaWVudHMgdGFrZSBsYXJnZSB2YWx1ZXMgdGhlIG9wdGltaXphdGlvbiBmdW5jdGlvbiBpcyBwZW5hbGl6ZWQuIFNvLCByaWRnZSByZWdyZXNzaW9uIHNocmlua3MgdGhlIGNvZWZmaWNpZW50cyBhbmQgaXQgaGVscHMgdG8gcmVkdWNlIHRoZSBtb2RlbCBjb21wbGV4aXR5IGFuZCBtdWx0aS1jb2xsaW5lYXJpdHkuDQoNCiAgQW4gaW1wb3J0YW50IGZhY3Qgd2UgbmVlZCB0byBub3RpY2UgYWJvdXQgcmlkZ2UgcmVncmVzc2lvbiBpcyB0aGF0IGl0IGVuZm9yY2VzIHRoZSBgYGBgPz9gYGAgY29lZmZpY2llbnRzIHRvIGJlIGxvd2VyLCBidXQgaXQgZG9lcyBub3QgZW5mb3JjZSB0aGVtIHRvIGJlIHplcm8uIFRoYXQgaXMsIGl0IHdpbGwgbm90IGdldCByaWQgb2YgaXJyZWxldmFudCBmZWF0dXJlcyBidXQgcmF0aGVyIG1pbmltaXplIHRoZWlyIGltcGFjdCBvbiB0aGUgdHJhaW5lZCBtb2RlbC4NCg0KYGBgDQpPYmplY3RpdmUgPSBSU1MgKyA/PyAqIChzdW0gb2Ygc3F1YXJlIG9mIGNvZWZmaWNpZW50cykNCmBgYA0KIyMgTmVlZCBvZiBSaWRnZSBSZWdyZXNzaW9uDQoNCiMjI1RvIG92ZXJjb21lIE92ZXJGaXRpbmcNCg0KICBXZSB3aWxsIHRha2UgYW4gZXhhbXBsZSBvZiBtb2RlbCBidWlsdCB1c2luZyBMaW5lciBSZWdyZXNzaW9uIHRvIGV4cGxhaW4gdGhlIGNvbmNlcHQgb2Ygb3ZlcmZpdHRpbmcNCg0KICBXaXRoIExpbmVhciBSZWdyZXNzaW9uIHdlIHdpbGwgZmluZCB0aGUgbGluZSB0aGF0IGJlc3QgZml0cyB0aGUgZGF0YSBpbiBvdGhlciB3b3JkcyB3ZSB3aWxsIGZpbmQgYSBsaW5lIHRoYXQgcmVzdWx0cyBpbiBtaW5pbXVtIHN1bSBvZiBzcXVhcmVkIHJlc2lkdWFscw0KDQojIyNSZXF1aXJlZCBMaWJyYXJpZXMNCmBgYA0KbGlicmFyeShnbG1uZXQpDQoNCmBgYA0KDQojIyNEYXRhc2V0DQp1c2luZyBkYXRhc2V0DQpgYGANCnN3aXNzIDwtIGRhdGFzZXRzOjpzd2lzcw0KYGBgDQpgYGANCnggPC0gbW9kZWwubWF0cml4KEZlcnRpbGl0eX4uLCBzd2lzcylbLC0xXQ0KeSA8LSBzd2lzcyRGZXJ0aWxpdHkNCmxhbWJkYSA8LSAxMF5zZXEoMTAsIC0yLCBsZW5ndGggPSAxMDApDQpgYGANCg0KYGBge3IgcmVuZGVyLWRhdGF9DQojcmVuZGVyVGFibGUobG9uZ2xleSkNCiNyZW5kZXJEYXRhVGFibGUobG9uZ2xleSkNCg0KRFQ6OnJlbmRlckRhdGFUYWJsZShsb25nbGV5KQ0KYGBgDQoNCmBgYHtyIHNsaWRlci1pbnB1dH0NCiNvbmUgc2xpZGVyDQpzbGlkZXJJbnB1dCgNCiAgICAgIGlucHV0SWQ9Ik15U2xpZGVyIiwgbGFiZWw9IkNob29zZSBhcHByb3ByaWF0ZSBWYWx1ZSIsDQogICAgICBtaW49MCxtYXggPSAxMCwgdmFsdWU9Mw0KKQ0KI3R3byBlbmRlZCBzbGlkZXINCnNsaWRlcklucHV0KA0KICBpbnB1dElkID0gIk15U2xpZGVyMiIsbGFiZWw9IkNob29zZSBhcHByb3ByaWF0ZSBWYWx1ZSIsDQogICAgICBtaW49MCxtYXggPSAxMCwgdmFsdWU9Yyg0LDYpDQopDQpgYGANCg0KYGBge3IgcHJpbnQgc2xpZGVyLWlucHV0fQ0KcmVuZGVyUHJpbnQoaW5wdXQkTXlTbGlkZXIyKQ0KYGBgDQo=</div>
 
 
 
